@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Select product </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+    body {
+    background: url(http://i.huffpost.com/gen/2753228/images/o-COFFEE-facebook.jpg) no-repeat;
+     -moz-background-size: 100%; /* Firefox 3.6+ */
+     -webkit-background-size: 100%; /* Safari 3.1+ и Chrome 4.0+ */
+     -o-background-size: 100%; /* Opera 9.6+ */
+    background-size: 100%; /* Современные браузеры */
+    /*-webkit-filter: blur(5px);*/
+    /*-moz-filter: blur(5px);*/
+    /*-o-filter: blur(5px);*/
+    /*-ms-filter: blur(25px);*/
+    /*filter: blur(15px);*/
+    /*filter: blur(10px);*/
+    color: white;
+    font-size: 18px;
+    }
+    .out{
+    position: absolute;
+    top: calc(86%);
+    left: calc(5% );
+    z-index: 2;
+    font-size: 16px ;
+    color:blue ;
+    }
+    label {
+    font-family: Arial, Helvetica, sans-serif;
+    }
+    button {
+    font-family: Arial, Helvetica, sans-serif;
+    }
+    h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="col-sm-2" ></div>
+    <div class="col-sm-6">
+        <h2 th:text="#{ord.select}"></h2>
+        <form action="#" th:action="@{/delivery}" th:object="${calculation}" method="post">
+
+            <table class="table" >
+                <thead>
+                <tr>
+                    <th th:text="#{ord.Select}"></th>
+                    <th th:text="#{ord.Coffee}"></th>
+                    <th th:text="#{ord.Cost}"></th>
+                    <th th:text="#{ord.Count}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item,stat : *{coffeeList}">
+                    <td>
+                        <input class="checked" th:id="'checked'+${stat.index}" type="checkbox" th:field="*{coffeeList[__${stat.index}__].selected}"   />
+                        <input type="hidden" th:field="*{coffeeList[__${stat.index}__].name}"/>
+                        <input type="hidden" th:field="*{coffeeList[__${stat.index}__].cost}"/>
+                    </td>
+
+                    <td th:text="${item.name}"></td>
+                    <td th:text="${item.cost}"></td>
+                    <td><input class="num" style="color: black ;width: 60px" th:id="${stat.index}" th:field="*{coffeeList[__${stat.index}__].count}" type="number" min="0" placeholder="0" readonly="readonly"/></td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="submit"  class="btn btn-success" th:text="#{ord.addaddress}"></button>
+        </form>
+    </div>
+    <div>
+        <a class="out" style="color:cyan ; font-size: 18px;top: calc(3%);
+                                  left: calc(75% );" href="/home" th:text="#{ord.goHome}">Go home page</a><br/>
+        <a class="out" style="color:cyan ; font-size: 18px;top: calc(7%);
+                                  left: calc(85% )" th:href="@{/logout}" th:text="#{ord.signout}">Sign out</a>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-10" th:if="${none}">
+            <p style="background-color: #c7254e;color: #c7ddef" th:text="#{ord.something}" >Error</p>
+
+        </div>
+
+    </div>
+
+
+</div>
+<div>
+    <a class="out" style=" top: calc(11%);
+      left: calc(88% );color: cyan" href="?lang=en">eng</a>
+    <a class="out" style=" top: calc(11%);
+      left: calc(92% );color: cyan" href="?lang=ru">рус</a>
+
+</div>
+
+
+<script>
+
+    var i = [ 0,1,2 ];
+    for (let obj of i) {
+        var checkedId = 'checked' + obj;
+        var textId = obj.toString();
+
+        var ch = document.getElementsByClassName("checked")[obj];
+        var tx = document.getElementsByClassName("num")[obj];
+
+        ch.addEventListener('click', myFunction);
+
+        function myFunction() {
+            if (!document.getElementsByClassName("num")[obj].hasAttribute('readonly')){
+                document.getElementsByClassName("num")[obj].value=0;
+                document.getElementsByClassName("num")[obj].setAttribute('readonly', "readonly");
+            } else {
+
+                document.getElementsByClassName("num")[obj].removeAttribute('readonly');
+            }
+
+        }
+
+    }
+
+</script>
+</body>
+</html>
